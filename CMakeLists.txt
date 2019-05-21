@@ -32,4 +32,4 @@ find_package(Qt5 REQUIRED COMPONENTS Widgets)
 add_executable(OpenGLCheckWithQt src/main.cxx )
 
 # Add the Qt5 Widgets for linking
-target_link_libraries(helloworld Qt5::Widgets)
+target_link_libraries(OpenGLCheckWithQt Qt5::Widgets)
