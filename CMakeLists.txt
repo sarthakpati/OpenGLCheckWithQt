@@ -5,9 +5,9 @@ project(OpenGLCheckWithQt)
 # Find includes in the build directories
 
 # Turn on automatic invocation of the MOC, UIC & RCC
-set(CMAKE_AUTOMOC ON)
-set(CMAKE_AUTOUIC ON)
-set(CMAKE_AUTORCC ON)
+# set(CMAKE_AUTOMOC ON)
+# set(CMAKE_AUTOUIC ON)
+# set(CMAKE_AUTORCC ON)
 
 # There may be a way to tell up front if Qt5 is going to be found, but I haven't found
 # a foolproof way to do it yet, so settle for the default error message for now.
@@ -22,7 +22,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall")
 
 # Make this a GUI application on Windows
 if(WIN32)
-  set(CMAKE_WIN32_EXECUTABLE ON)
+  # set(CMAKE_WIN32_EXECUTABLE ON)
 endif()
 
 # Find the QtWidgets library
@@ -32,4 +32,4 @@ find_package(Qt5 REQUIRED COMPONENTS Widgets)
 add_executable(OpenGLCheckWithQt src/main.cxx )
 
 # Add the Qt5 Widgets for linking
-target_link_libraries(OpenGLCheckWithQt Qt5::Widgets)
+target_link_libraries(OpenGLCheckWithQt Qt5::Widgets Qt5::Core Qt5::Gui)
