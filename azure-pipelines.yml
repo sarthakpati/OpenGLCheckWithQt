@@ -25,10 +25,10 @@ jobs:
       displayName: 'Install dependencies'
   
     - bash: |
-        rm -rf binaries/*mac*.zip
-        rm -rf binaries/*linux*.zip
-        rm -rf history
-        rm -rf src/applications/individualApps/libra/MCRInstaller.zip
+        #rm -rf binaries/*mac*.zip
+        #rm -rf binaries/*linux*.zip
+        #rm -rf history
+        #rm -rf src/applications/individualApps/libra/MCRInstaller.zip
       displayName: 'Take the nuclear option'
 
     - script: |
@@ -43,14 +43,14 @@ jobs:
     - script: |
         cd bin
         call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" x64
-        cmake -DCMAKE_GENERATOR_PLATFORM=x64 -DCMAKE_INSTALL_PREFIX="./install" -DCAPTK_DISABLE_CWL=ON ..
+        cmake -DCMAKE_GENERATOR_PLATFORM=x64 -DCMAKE_INSTALL_PREFIX="./install" -DCheckOpenGL_DISABLE_CWL=ON ..
         setx PATH "%PATH%;$(Build.SourcesDirectory)/bin/qt/5.12.1/bin"
         cmake --build . --target ALL_BUILD --config Release
-      displayName: 'Configure and compile CaPTk'
+      displayName: 'Configure and compile CheckOpenGL'
     
     - script: |
-        rm -rf binaries
-        rm -rf regression
+        #rm -rf binaries
+        #rm -rf regression
         rm -rf scripts
         ls -lt
         cd bin
@@ -64,12 +64,12 @@ jobs:
     #    cmake -DCMAKE_GENERATOR_PLATFORM=x64 -DCMAKE_INSTALL_PREFIX="./install" ..
     #    cmake --build . --target PACKAGE --config Release
     #
-    #    mv CaPTk_*_Installer.exe $(Build.ArtifactStagingDirectory)
+    #    mv CheckOpenGL_*_Installer.exe $(Build.ArtifactStagingDirectory)
     #    
     #    cd ../
     #    rm -rf *
     #    
-    #  displayName: 'Package CaPTk'
+    #  displayName: 'Package CheckOpenGL'
     #
     #- script: | 
     #    cd bin
@@ -79,7 +79,7 @@ jobs:
     #    rm -rf externalApps
     #    rm -rf binaries_windows.zip
     #    rm -rf ../src
-    #    mv CaPTk_*_Installer.exe ../
+    #    mv CheckOpenGL_*_Installer.exe ../
     #    
     #  displayName: 'Moving Installer one level up'
     #
@@ -149,13 +149,13 @@ jobs:
         make -j2
       displayName: 'Configure and compile Superbuild'
 
-    # Configure and build CaPTk
+    # Configure and build CheckOpenGL
     - bash: |
         cd bin
         cmake -DCMAKE_INSTALL_PREFIX="./install/appdir/usr" -DQT_DOWNLOAD_FORCE=ON ..
         make -j2
         #make install/strip
-      displayName: 'Configure and compile CaPTk'
+      displayName: 'Configure and compile CheckOpenGL'
 
     # Check qt
     - bash: |
@@ -181,8 +181,8 @@ jobs:
         #make install
 
         # export PKG_FAST_MODE=1
-        ./scripts/captk-pkg
-        ./scripts/captk-pkg
+        ./scripts/pkg
+        ./scripts/pkg
 
         rm -rf bin
         rm -rf src
@@ -190,7 +190,7 @@ jobs:
 
         rm -rf scripts
 
-        mv CaPTk_*_Installer.bin $(Build.ArtifactStagingDirectory)
+        mv CheckOpenGL_*_Installer.bin $(Build.ArtifactStagingDirectory)
         
       displayName: 'Set up environment variables for packager and build a package'
     
@@ -220,10 +220,10 @@ jobs:
       displayName: 'Brew dependencies'
     
     - bash: |
-        rm -rf binaries/*linux*.zip
-        rm -rf binaries/*windows*.zip
-        rm -rf history
-        rm -rf src/applications/individualApps/libra/MCRInstaller.zip
+        #rm -rf binaries/*linux*.zip
+        #rm -rf binaries/*windows*.zip
+        #rm -rf history
+        #rm -rf src/applications/individualApps/libra/MCRInstaller.zip
       displayName: 'Take the nuclear option'
 
     - bash: |
@@ -265,13 +265,13 @@ jobs:
         cmake ../
 
         make 
-      displayName: 'Export variables for llvm then configure and compile CaPTk'
+      displayName: 'Export variables for llvm then configure and compile CheckOpenGL'
     
     - bash: |
         cd bin
 
         rm CMakeCache.txt
-        rm -rf CaPTk*.app
+        rm -rf CheckOpenGL*.app
 
         export CC=/usr/local/opt/llvm/bin/clang
         export CXX=/usr/local/opt/llvm/bin/clang++
@@ -294,35 +294,35 @@ jobs:
         pkgname="_Installer"
         pkgname="$version$pkgname"
 
-        pkgbuild --version $version --identifier com.cbica.captk --install-location /Applications --component ./_CPack_Packages/OSX/DragNDrop/CaPTk_$version/CaPTk_$version.app/  ./CaPTk_$version.pkg
+        pkgbuild --version $version --identifier com.cbica.CheckOpenGL --install-location /Applications --component ./_CPack_Packages/OSX/DragNDrop/CheckOpenGL_$version/CheckOpenGL_$version.app/  ./CheckOpenGL_$version.pkg
 
-        productbuild --synthesize --package CaPTk_$version.pkg ./distribution.xml
+        productbuild --synthesize --package CheckOpenGL_$version.pkg ./distribution.xml
 
         xml='<?xml version="1.0" encoding="utf-8"?>
         <installer-gui-script minSpecVersion="1">
-            <title>CaPTk_'"$version"'</title>
+            <title>CheckOpenGL_'"$version"'</title>
             <license file="Combined.txt"></license>
-            <pkg-ref id="com.cbica.captk"/>
+            <pkg-ref id="com.cbica.CheckOpenGL"/>
             <options customize="never" require-scripts="false"/>
             <choices-outline>
                 <line choice="default">
-                    <line choice="com.cbica.captk"/>
+                    <line choice="com.cbica.CheckOpenGL"/>
                 </line>
             </choices-outline>
             <choice id="default"/>
-            <choice id="com.cbica.captk" visible="false">
-                <pkg-ref id="com.cbica.captk"/>
+            <choice id="com.cbica.CheckOpenGL" visible="false">
+                <pkg-ref id="com.cbica.CheckOpenGL"/>
             </choice>
-            <pkg-ref id="com.cbica.captk" version="$version" onConclusion="none">CaPTk_'"$version"'.pkg</pkg-ref>
+            <pkg-ref id="com.cbica.CheckOpenGL" version="$version" onConclusion="none">CheckOpenGL_'"$version"'.pkg</pkg-ref>
         </installer-gui-script>' 
 
         echo $xml > "./distribution.xml"
 
-        productbuild --distribution ./distribution.xml --resources ./_CPack_Packages/OSX/DragNDrop/CaPTk_$version/CaPTk_$version.app/Contents/Resources/license/ --package-path . ./CaPTk_$pkgname.pkg
+        productbuild --distribution ./distribution.xml --resources ./_CPack_Packages/OSX/DragNDrop/CheckOpenGL_$version/CheckOpenGL_$version.app/Contents/Resources/license/ --package-path . ./CheckOpenGL_$pkgname.pkg
         
         mv *Installer.pkg $(Build.ArtifactStagingDirectory)
         rm -rf *
-      displayName: 'Package CaPTk (.dmg and .pkg)'
+      displayName: 'Package CheckOpenGL (.dmg and .pkg)'
     
     - task: PublishBuildArtifacts@1
       inputs:
@@ -363,13 +363,13 @@ jobs:
 #         make -j2
 #       displayName: 'Configure and compile Superbuild'
 
-#     # Configure and build CaPTk
+#     # Configure and build CheckOpenGL
 #     - bash: |
 #         cd bin
 #         cmake -DCMAKE_INSTALL_PREFIX="./install/appdir/usr" -DQT_DOWNLOAD_FORCE=ON ..
 #         make -j2
 #         make install/strip
-#       displayName: 'Configure and compile CaPTk'
+#       displayName: 'Configure and compile CheckOpenGL'
 
 #     # Check qt
 #     - bash: |
@@ -392,11 +392,11 @@ jobs:
 
 #         make install
 
-#         ./scripts/captk-pkg
+#         ./scripts/CheckOpenGL-pkg
 
 #         rm -rf bin
 
-#         mv CaPTk_*_Installer.bin $(Build.ArtifactStagingDirectory)
+#         mv CheckOpenGL_*_Installer.bin $(Build.ArtifactStagingDirectory)
         
 #       displayName: 'Set up environment variables for packager and build a package'
 
@@ -461,13 +461,13 @@ jobs:
 #         cmake ../
 
 #         make 
-#       displayName: 'Export variables for llvm then configure and compile CaPTk'
+#       displayName: 'Export variables for llvm then configure and compile CheckOpenGL'
   
 #     - bash: |
 #         cd bin
 
 #         rm CMakeCache.txt
-#         rm -rf CaPTk*.app
+#         rm -rf CheckOpenGL*.app
 
 #         export CC=/usr/local/opt/llvm/bin/clang
 #         export CXX=/usr/local/opt/llvm/bin/clang++
@@ -490,35 +490,35 @@ jobs:
 #         pkgname="_Installer"
 #         pkgname="$version$pkgname"
 
-#         pkgbuild --version $version --identifier com.cbica.captk --install-location /Applications --component ./_CPack_Packages/OSX/DragNDrop/CaPTk_$version/CaPTk_$version.app/  ./CaPTk_$version.pkg
+#         pkgbuild --version $version --identifier com.cbica.CheckOpenGL --install-location /Applications --component ./_CPack_Packages/OSX/DragNDrop/CheckOpenGL_$version/CheckOpenGL_$version.app/  ./CheckOpenGL_$version.pkg
 
-#         productbuild --synthesize --package CaPTk_$version.pkg ./distribution.xml
+#         productbuild --synthesize --package CheckOpenGL_$version.pkg ./distribution.xml
 
 #         xml='<?xml version="1.0" encoding="utf-8"?>
 #         <installer-gui-script minSpecVersion="1">
-#             <title>CaPTk_'"$version"'</title>
+#             <title>CheckOpenGL_'"$version"'</title>
 #             <license file="Combined.txt"></license>
-#             <pkg-ref id="com.cbica.captk"/>
+#             <pkg-ref id="com.cbica.CheckOpenGL"/>
 #             <options customize="never" require-scripts="false"/>
 #             <choices-outline>
 #                 <line choice="default">
-#                     <line choice="com.cbica.captk"/>
+#                     <line choice="com.cbica.CheckOpenGL"/>
 #                 </line>
 #             </choices-outline>
 #           <choice id="default"/>
-#             <choice id="com.cbica.captk" visible="false">
-#                 <pkg-ref id="com.cbica.captk"/>
+#             <choice id="com.cbica.CheckOpenGL" visible="false">
+#                 <pkg-ref id="com.cbica.CheckOpenGL"/>
 #             </choice>
-#             <pkg-ref id="com.cbica.captk" version="$version" onConclusion="none">CaPTk_'"$version"'.pkg</pkg-ref>
+#             <pkg-ref id="com.cbica.CheckOpenGL" version="$version" onConclusion="none">CheckOpenGL_'"$version"'.pkg</pkg-ref>
 #         </installer-gui-script>' 
 
 #         echo $xml > "./distribution.xml"
 
-#         productbuild --distribution ./distribution.xml --resources ./_CPack_Packages/OSX/DragNDrop/CaPTk_$version/CaPTk_$version.app/Contents/Resources/license/ --package-path . ./CaPTk_$pkgname.pkg
+#         productbuild --distribution ./distribution.xml --resources ./_CPack_Packages/OSX/DragNDrop/CheckOpenGL_$version/CheckOpenGL_$version.app/Contents/Resources/license/ --package-path . ./CheckOpenGL_$pkgname.pkg
       
 #         mv *Installer.pkg $(Build.ArtifactStagingDirectory)
 #         rm -rf *
-#       displayName: 'Package CaPTk (.dmg and .pkg)'
+#       displayName: 'Package CheckOpenGL (.dmg and .pkg)'
 
 #     - task: PublishBuildArtifacts@1
 #       inputs:
@@ -609,13 +609,13 @@ jobs:
 #        make -j2
 #      displayName: 'Configure and compile Superbuild'
 #
-#    # Configure and build CaPTk
+#    # Configure and build CheckOpenGL
 #    - script: |
 #        cd bin
 #        cmake -DCMAKE_INSTALL_PREFIX="./install/appdir/usr" ..
 #        make -j2
 #        make install/strip
-#      displayName: 'Configure and compile CaPTk'
+#      displayName: 'Configure and compile CheckOpenGL'
 #
 #    # Check libra
 #    - script: |
@@ -631,8 +631,8 @@ jobs:
 #        make install
 #
 #        # export PKG_FAST_MODE=1
-#        ./scripts/captk-pkg
-#        # ./scripts/captk-pkg
+#        ./scripts/CheckOpenGL-pkg
+#        # ./scripts/CheckOpenGL-pkg
 #
 #        rm -rf bin
 #        rm -rf src
@@ -640,7 +640,7 @@ jobs:
 #
 #        rm -rf scripts
 #
-#        mv CaPTk_*_Installer.bin $(Build.ArtifactStagingDirectory)
+#        mv CheckOpenGL_*_Installer.bin $(Build.ArtifactStagingDirectory)
 #        
 #      displayName: 'Set up environment variables for packager and build a package'
 #    
