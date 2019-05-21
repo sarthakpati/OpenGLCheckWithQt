@@ -1,27 +1,37 @@
 #include <iostream>
 
-#include "qapplication.h"
-#include "qoffscreensurface.h"
-#include "qopenglcontext.h"
-#include "qdebug.h"
-#include "qopenglfunctions.h"
+#include "CheckOpenGLVersion.h"
 
+#ifdef _WIN32
+// ensures no console pops up when launching the program
+int CALLBACK WinMain(HINSTANCE hInstance, HINSTANCE prevInstance, LPSTR lpCmdLine, int nShowCmd)
+{
+  int argc = __argc;
+  char **argv = __argv;
+#else
 int main(int argc, char** argv)
 {
-  QApplication app(argc, argv);
+#endif
 
-  QOffscreenSurface surf;
-  surf.create();
+#if WIN32
+  CheckOpenGLVersion checker(hInstance);
+#else
+  CheckOpenGLVersion checker;
+#endif
 
-  QOpenGLContext ctx;
-  ctx.create();
-  ctx.makeCurrent(&surf);
-  
-  std::string gl_version = reinterpret_cast<const char*>(ctx.functions()->glGetString(GL_VERSION));
-  std::string gl_extensions = reinterpret_cast<const char*>(ctx.functions()->glGetString(GL_EXTENSIONS));
-
-  std::cout << "OpenGL Version: " << gl_version << "\n===\n";
-  std::cout << "OpenGL Extensions: " << gl_extensions << "\n";
+  if (!checker.hasVersion_3_2())
+  {
+    std::string msg = "A working 3.2 version of OpenGL was not found in your hardware/software combination; consequently, CaPTk's GUI will not work; all CLIs will work as expected.\n\n";
+    msg += "\tOpenGL Version : " + checker.version + "\n";
+    msg += "\tOpenGL Renderer: " + checker.renderer + "\n";
+    msg += "\tOpenGL Vendor  : " + checker.vendor;
+    std::cerr << msg << "\n";
+    return EXIT_FAILURE;
+  }
+  else
+  {
+    std::cout << "Compatible OpenGL was found.\n";
+  }
   
   return 0;
 
