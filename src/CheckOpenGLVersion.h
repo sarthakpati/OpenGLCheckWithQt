@@ -28,6 +28,7 @@ class CheckOpenGLVersion {
 public:
 
   CheckOpenGLVersion();
+  ~CheckOpenGLVersion() {};
 #if WIN32
   CheckOpenGLVersion(HINSTANCE hInstance);
 #endif

@@ -2,6 +2,8 @@
 
 #include "CheckOpenGLVersion.h"
 
+#include "qapplication.h"
+
 #ifdef _WIN32
 // ensures no console pops up when launching the program
 int CALLBACK WinMain(HINSTANCE hInstance, HINSTANCE prevInstance, LPSTR lpCmdLine, int nShowCmd)
@@ -12,6 +14,10 @@ int CALLBACK WinMain(HINSTANCE hInstance, HINSTANCE prevInstance, LPSTR lpCmdLin
 int main(int argc, char** argv)
 {
 #endif
+
+  QApplication app(argc, argv);
+
+  app.processEvents();
 
 #if WIN32
   CheckOpenGLVersion checker(hInstance);
@@ -33,6 +39,6 @@ int main(int argc, char** argv)
     std::cout << "Compatible OpenGL was found.\n";
   }
   
-  return 0;
+  return app.exec();
 
 }
