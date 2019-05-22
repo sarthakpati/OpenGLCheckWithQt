@@ -43,10 +43,10 @@ jobs:
     - script: |
         cd bin
         call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" x64
-        cmake -DCMAKE_GENERATOR_PLATFORM=x64 -DCMAKE_INSTALL_PREFIX="./install" -DCheckOpenGL_DISABLE_CWL=ON ..
+        cmake -DCMAKE_GENERATOR_PLATFORM=x64 -DCMAKE_INSTALL_PREFIX="./install" -DOpenGLCheckWithQt_DISABLE_CWL=ON ..
         setx PATH "%PATH%;$(Build.SourcesDirectory)/bin/qt/5.12.1/bin"
         cmake --build . --target ALL_BUILD --config Release
-      displayName: 'Configure and compile CheckOpenGL'
+      displayName: 'Configure and compile OpenGLCheckWithQt'
     
     - script: |
         #rm -rf binaries
@@ -64,12 +64,12 @@ jobs:
     #    cmake -DCMAKE_GENERATOR_PLATFORM=x64 -DCMAKE_INSTALL_PREFIX="./install" ..
     #    cmake --build . --target PACKAGE --config Release
     #
-    #    mv CheckOpenGL_*_Installer.exe $(Build.ArtifactStagingDirectory)
+    #    mv OpenGLCheckWithQt_*_Installer.exe $(Build.ArtifactStagingDirectory)
     #    
     #    cd ../
     #    rm -rf *
     #    
-    #  displayName: 'Package CheckOpenGL'
+    #  displayName: 'Package OpenGLCheckWithQt'
     #
     #- script: | 
     #    cd bin
@@ -79,7 +79,7 @@ jobs:
     #    rm -rf externalApps
     #    rm -rf binaries_windows.zip
     #    rm -rf ../src
-    #    mv CheckOpenGL_*_Installer.exe ../
+    #    mv OpenGLCheckWithQt_*_Installer.exe ../
     #    
     #  displayName: 'Moving Installer one level up'
     #
@@ -149,13 +149,13 @@ jobs:
         make -j2
       displayName: 'Configure and compile Superbuild'
 
-    # Configure and build CheckOpenGL
+    # Configure and build OpenGLCheckWithQt
     - bash: |
         cd bin
         cmake -DCMAKE_INSTALL_PREFIX="./install/appdir/usr" -DQT_DOWNLOAD_FORCE=ON ..
         make -j2
         #make install/strip
-      displayName: 'Configure and compile CheckOpenGL'
+      displayName: 'Configure and compile OpenGLCheckWithQt'
 
     # Check qt
     - bash: |
@@ -192,7 +192,7 @@ jobs:
 
         rm -rf scripts
 
-        mv CheckOpenGL_*_Installer.bin $(Build.ArtifactStagingDirectory)
+        mv OpenGLCheckWithQt_*_Installer.bin $(Build.ArtifactStagingDirectory)
         
       displayName: 'Set up environment variables for packager and build a package'
     
@@ -267,13 +267,13 @@ jobs:
         cmake ../
 
         make 
-      displayName: 'Export variables for llvm then configure and compile CheckOpenGL'
+      displayName: 'Export variables for llvm then configure and compile OpenGLCheckWithQt'
     
     - bash: |
         cd bin
 
         rm CMakeCache.txt
-        rm -rf CheckOpenGL*.app
+        rm -rf OpenGLCheckWithQt*.app
 
         export CC=/usr/local/opt/llvm/bin/clang
         export CXX=/usr/local/opt/llvm/bin/clang++
@@ -296,35 +296,35 @@ jobs:
         pkgname="_Installer"
         pkgname="$version$pkgname"
 
-        pkgbuild --version $version --identifier com.cbica.CheckOpenGL --install-location /Applications --component ./_CPack_Packages/OSX/DragNDrop/CheckOpenGL_$version/CheckOpenGL_$version.app/  ./CheckOpenGL_$version.pkg
+        pkgbuild --version $version --identifier com.cbica.OpenGLCheckWithQt --install-location /Applications --component ./_CPack_Packages/OSX/DragNDrop/OpenGLCheckWithQt_$version/OpenGLCheckWithQt_$version.app/  ./OpenGLCheckWithQt_$version.pkg
 
-        productbuild --synthesize --package CheckOpenGL_$version.pkg ./distribution.xml
+        productbuild --synthesize --package OpenGLCheckWithQt_$version.pkg ./distribution.xml
 
         xml='<?xml version="1.0" encoding="utf-8"?>
         <installer-gui-script minSpecVersion="1">
-            <title>CheckOpenGL_'"$version"'</title>
+            <title>OpenGLCheckWithQt_'"$version"'</title>
             <license file="Combined.txt"></license>
-            <pkg-ref id="com.cbica.CheckOpenGL"/>
+            <pkg-ref id="com.cbica.OpenGLCheckWithQt"/>
             <options customize="never" require-scripts="false"/>
             <choices-outline>
                 <line choice="default">
-                    <line choice="com.cbica.CheckOpenGL"/>
+                    <line choice="com.cbica.OpenGLCheckWithQt"/>
                 </line>
             </choices-outline>
             <choice id="default"/>
-            <choice id="com.cbica.CheckOpenGL" visible="false">
-                <pkg-ref id="com.cbica.CheckOpenGL"/>
+            <choice id="com.cbica.OpenGLCheckWithQt" visible="false">
+                <pkg-ref id="com.cbica.OpenGLCheckWithQt"/>
             </choice>
-            <pkg-ref id="com.cbica.CheckOpenGL" version="$version" onConclusion="none">CheckOpenGL_'"$version"'.pkg</pkg-ref>
+            <pkg-ref id="com.cbica.OpenGLCheckWithQt" version="$version" onConclusion="none">OpenGLCheckWithQt_'"$version"'.pkg</pkg-ref>
         </installer-gui-script>' 
 
         echo $xml > "./distribution.xml"
 
-        productbuild --distribution ./distribution.xml --resources ./_CPack_Packages/OSX/DragNDrop/CheckOpenGL_$version/CheckOpenGL_$version.app/Contents/Resources/license/ --package-path . ./CheckOpenGL_$pkgname.pkg
+        productbuild --distribution ./distribution.xml --resources ./_CPack_Packages/OSX/DragNDrop/OpenGLCheckWithQt_$version/OpenGLCheckWithQt_$version.app/Contents/Resources/license/ --package-path . ./OpenGLCheckWithQt_$pkgname.pkg
         
         mv *Installer.pkg $(Build.ArtifactStagingDirectory)
         rm -rf *
-      displayName: 'Package CheckOpenGL (.dmg and .pkg)'
+      displayName: 'Package OpenGLCheckWithQt (.dmg and .pkg)'
     
     - task: PublishBuildArtifacts@1
       inputs:
@@ -365,13 +365,13 @@ jobs:
 #         make -j2
 #       displayName: 'Configure and compile Superbuild'
 
-#     # Configure and build CheckOpenGL
+#     # Configure and build OpenGLCheckWithQt
 #     - bash: |
 #         cd bin
 #         cmake -DCMAKE_INSTALL_PREFIX="./install/appdir/usr" -DQT_DOWNLOAD_FORCE=ON ..
 #         make -j2
 #         make install/strip
-#       displayName: 'Configure and compile CheckOpenGL'
+#       displayName: 'Configure and compile OpenGLCheckWithQt'
 
 #     # Check qt
 #     - bash: |
@@ -394,11 +394,11 @@ jobs:
 
 #         make install
 
-#         ./scripts/CheckOpenGL-pkg
+#         ./scripts/OpenGLCheckWithQt-pkg
 
 #         rm -rf bin
 
-#         mv CheckOpenGL_*_Installer.bin $(Build.ArtifactStagingDirectory)
+#         mv OpenGLCheckWithQt_*_Installer.bin $(Build.ArtifactStagingDirectory)
         
 #       displayName: 'Set up environment variables for packager and build a package'
 
@@ -463,13 +463,13 @@ jobs:
 #         cmake ../
 
 #         make 
-#       displayName: 'Export variables for llvm then configure and compile CheckOpenGL'
+#       displayName: 'Export variables for llvm then configure and compile OpenGLCheckWithQt'
   
 #     - bash: |
 #         cd bin
 
 #         rm CMakeCache.txt
-#         rm -rf CheckOpenGL*.app
+#         rm -rf OpenGLCheckWithQt*.app
 
 #         export CC=/usr/local/opt/llvm/bin/clang
 #         export CXX=/usr/local/opt/llvm/bin/clang++
@@ -492,35 +492,35 @@ jobs:
 #         pkgname="_Installer"
 #         pkgname="$version$pkgname"
 
-#         pkgbuild --version $version --identifier com.cbica.CheckOpenGL --install-location /Applications --component ./_CPack_Packages/OSX/DragNDrop/CheckOpenGL_$version/CheckOpenGL_$version.app/  ./CheckOpenGL_$version.pkg
+#         pkgbuild --version $version --identifier com.cbica.OpenGLCheckWithQt --install-location /Applications --component ./_CPack_Packages/OSX/DragNDrop/OpenGLCheckWithQt_$version/OpenGLCheckWithQt_$version.app/  ./OpenGLCheckWithQt_$version.pkg
 
-#         productbuild --synthesize --package CheckOpenGL_$version.pkg ./distribution.xml
+#         productbuild --synthesize --package OpenGLCheckWithQt_$version.pkg ./distribution.xml
 
 #         xml='<?xml version="1.0" encoding="utf-8"?>
 #         <installer-gui-script minSpecVersion="1">
-#             <title>CheckOpenGL_'"$version"'</title>
+#             <title>OpenGLCheckWithQt_'"$version"'</title>
 #             <license file="Combined.txt"></license>
-#             <pkg-ref id="com.cbica.CheckOpenGL"/>
+#             <pkg-ref id="com.cbica.OpenGLCheckWithQt"/>
 #             <options customize="never" require-scripts="false"/>
 #             <choices-outline>
 #                 <line choice="default">
-#                     <line choice="com.cbica.CheckOpenGL"/>
+#                     <line choice="com.cbica.OpenGLCheckWithQt"/>
 #                 </line>
 #             </choices-outline>
 #           <choice id="default"/>
-#             <choice id="com.cbica.CheckOpenGL" visible="false">
-#                 <pkg-ref id="com.cbica.CheckOpenGL"/>
+#             <choice id="com.cbica.OpenGLCheckWithQt" visible="false">
+#                 <pkg-ref id="com.cbica.OpenGLCheckWithQt"/>
 #             </choice>
-#             <pkg-ref id="com.cbica.CheckOpenGL" version="$version" onConclusion="none">CheckOpenGL_'"$version"'.pkg</pkg-ref>
+#             <pkg-ref id="com.cbica.OpenGLCheckWithQt" version="$version" onConclusion="none">OpenGLCheckWithQt_'"$version"'.pkg</pkg-ref>
 #         </installer-gui-script>' 
 
 #         echo $xml > "./distribution.xml"
 
-#         productbuild --distribution ./distribution.xml --resources ./_CPack_Packages/OSX/DragNDrop/CheckOpenGL_$version/CheckOpenGL_$version.app/Contents/Resources/license/ --package-path . ./CheckOpenGL_$pkgname.pkg
+#         productbuild --distribution ./distribution.xml --resources ./_CPack_Packages/OSX/DragNDrop/OpenGLCheckWithQt_$version/OpenGLCheckWithQt_$version.app/Contents/Resources/license/ --package-path . ./OpenGLCheckWithQt_$pkgname.pkg
       
 #         mv *Installer.pkg $(Build.ArtifactStagingDirectory)
 #         rm -rf *
-#       displayName: 'Package CheckOpenGL (.dmg and .pkg)'
+#       displayName: 'Package OpenGLCheckWithQt (.dmg and .pkg)'
 
 #     - task: PublishBuildArtifacts@1
 #       inputs:
@@ -611,13 +611,13 @@ jobs:
 #        make -j2
 #      displayName: 'Configure and compile Superbuild'
 #
-#    # Configure and build CheckOpenGL
+#    # Configure and build OpenGLCheckWithQt
 #    - script: |
 #        cd bin
 #        cmake -DCMAKE_INSTALL_PREFIX="./install/appdir/usr" ..
 #        make -j2
 #        make install/strip
-#      displayName: 'Configure and compile CheckOpenGL'
+#      displayName: 'Configure and compile OpenGLCheckWithQt'
 #
 #    # Check libra
 #    - script: |
@@ -633,8 +633,8 @@ jobs:
 #        make install
 #
 #        # export PKG_FAST_MODE=1
-#        ./scripts/CheckOpenGL-pkg
-#        # ./scripts/CheckOpenGL-pkg
+#        ./scripts/OpenGLCheckWithQt-pkg
+#        # ./scripts/OpenGLCheckWithQt-pkg
 #
 #        rm -rf bin
 #        rm -rf src
@@ -642,7 +642,7 @@ jobs:
 #
 #        rm -rf scripts
 #
-#        mv CheckOpenGL_*_Installer.bin $(Build.ArtifactStagingDirectory)
+#        mv OpenGLCheckWithQt_*_Installer.bin $(Build.ArtifactStagingDirectory)
 #        
 #      displayName: 'Set up environment variables for packager and build a package'
 #    
