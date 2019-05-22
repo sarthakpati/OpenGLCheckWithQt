@@ -148,10 +148,8 @@ ELSE()
   )
 ENDIF()
 
-add_executable(OpenGLCheckWithQt ${SOURCES} )
-
 # Add the Qt5 Widgets for linking
-target_link_libraries(OpenGLCheckWithQt ${DEPENDENT_LIBS} )
+target_link_libraries(${EXE_NAME} ${DEPENDENT_LIBS} )
 
 IF (APPLE)
   INSTALL( TARGETS OpenGLCheckWithQt
