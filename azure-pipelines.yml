@@ -179,6 +179,8 @@ jobs:
         rm -rf binaries
 
         #make install
+        
+        chmod +x ./scripts/pkg
 
         # export PKG_FAST_MODE=1
         ./scripts/pkg
