@@ -4,44 +4,44 @@
 # NOTE: This is NOT a script intended to be run as a part of the linux build or configuration process!
 # It is meant to be bundled within makeself to install the binaries to the correct directories.
 
-install_CheckOpenGL () {
+install_OpenGLCheckWithQt () {
   # Prep stage
 
   # Check for file
-  if [ -f ~/CheckOpenGL ]
+  if [ -f ~/OpenGLCheckWithQt ]
   then
-    echo "Fatal: ~/CheckOpenGL exists and is a file, not a directory"
+    echo "Fatal: ~/OpenGLCheckWithQt exists and is a file, not a directory"
     echo "To install, please ensure this file is renamed or moved"
     exit 1
   fi
 
   # Check for directory
-  if [ -d ~/CheckOpenGL ]
+  if [ -d ~/OpenGLCheckWithQt ]
   then
-    echo "~/CheckOpenGL exists. Proceeding..."
+    echo "~/OpenGLCheckWithQt exists. Proceeding..."
   else
-    echo "Creating ~/CheckOpenGL/..."
-    mkdir ~/CheckOpenGL/
+    echo "Creating ~/OpenGLCheckWithQt/..."
+    mkdir ~/OpenGLCheckWithQt/
   fi
 
-  # Version number. 'version' file should be provided by CheckOpenGL-pkg
+  # Version number. 'version' file should be provided by OpenGLCheckWithQt-pkg
   ver=`cat version`
 
   # Check version dir/file
-  if [ -f ~/CheckOpenGL/${ver} ]
+  if [ -f ~/OpenGLCheckWithQt/${ver} ]
   then
-    echo "Fatal: ~/CheckOpenGL/${ver} exists and is a file, not a directory"
+    echo "Fatal: ~/OpenGLCheckWithQt/${ver} exists and is a file, not a directory"
     echo "To install, please ensure this file is renamed or moved"
     exit 1
   fi
 
   # Check for directory
-  if [ -d ~/CheckOpenGL/${ver} ]
+  if [ -d ~/OpenGLCheckWithQt/${ver} ]
   then
-    echo "~/CheckOpenGL/${ver} exists. Proceeding..."
+    echo "~/OpenGLCheckWithQt/${ver} exists. Proceeding..."
   else
-    echo "Creating ~/CheckOpenGL/${ver}/..."
-    mkdir ~/CheckOpenGL/${ver}/
+    echo "Creating ~/OpenGLCheckWithQt/${ver}/..."
+    mkdir ~/OpenGLCheckWithQt/${ver}/
   fi
 
 
@@ -54,8 +54,8 @@ install_CheckOpenGL () {
   # the rest of it gets the result of that in bytes
   freedisk=`echo "$(df . | tail -n -1 | awk '{print $3}') * 1024" | bc -l`
 
-  # Used space is gotten by analyzing the CheckOpenGL.bin file with ls -l
-  useddisk=`ls -l CheckOpenGL.bin | awk '{print $5}'`
+  # Used space is gotten by analyzing the OpenGLCheckWithQt.bin file with ls -l
+  useddisk=`ls -l OpenGLCheckWithQt.bin | awk '{print $5}'`
 
   if [ ${useddisk} -gt ${freedisk} ]
   then
@@ -74,11 +74,11 @@ install_CheckOpenGL () {
   if [ $? -ne 0 ]
   then
     fusefail=1
-    echo "Warning: FUSE is not installed. See https://github.com/CBICA/CheckOpenGL/wiki/GNU-Linux-Installer-Troubleshooting#dlopen-error-loading-libfuseso2-fuse-not-installed for further information. The AppImage will continue installation as normal."
+    echo "Warning: FUSE is not installed. See https://github.com/CBICA/OpenGLCheckWithQt/wiki/GNU-Linux-Installer-Troubleshooting#dlopen-error-loading-libfuseso2-fuse-not-installed for further information. The AppImage will continue installation as normal."
   fi
 
   # Move file but preserve pid
-  mv ./CheckOpenGL.bin ~/CheckOpenGL/${ver}/CheckOpenGL-${ver}.bin 2>/dev/null &
+  mv ./OpenGLCheckWithQt.bin ~/OpenGLCheckWithQt/${ver}/OpenGLCheckWithQt-${ver}.bin 2>/dev/null &
   pid=$!
     
   # The latest in bash spinner technology from npm
@@ -95,25 +95,25 @@ install_CheckOpenGL () {
   printf "\n"
 
   # Last case
-  chmod +x ~/CheckOpenGL/${ver}/CheckOpenGL-${ver}.bin
+  chmod +x ~/OpenGLCheckWithQt/${ver}/OpenGLCheckWithQt-${ver}.bin
   if [ $? -ne 0 ]; then
-    echo "WARNING: It appears as if something is wrong with your installation. Please make sure there is enough room on your disk, and that CheckOpenGL-${ver}.bin is present under ~/CheckOpenGL"
+    echo "WARNING: It appears as if something is wrong with your installation. Please make sure there is enough room on your disk, and that OpenGLCheckWithQt-${ver}.bin is present under ~/OpenGLCheckWithQt"
     exit 1
   fi
 
   # Creating a symbolic link
-  echo "Creating symbolic link 'CheckOpenGL'"
-  cd ~/CheckOpenGL/${ver}/
-  ln -s ./CheckOpenGL-${ver}.bin checkopengl
+  echo "Creating symbolic link 'OpenGLCheckWithQt'"
+  cd ~/OpenGLCheckWithQt/${ver}/
+  ln -s ./OpenGLCheckWithQt-${ver}.bin OpenGLCheckWithQt
 
   # Display any warnings at the end
   if [ ${fusefail} -eq 1 ]
   then
-    echo "WARNING: You may have issues running the AppImage since FUSE was not detected on your filesystem; please extract the installation files using the \"~/CheckOpenGL/${ver}/CheckOpenGL --appimage-extract\" option"
+    echo "WARNING: You may have issues running the AppImage since FUSE was not detected on your filesystem; please extract the installation files using the \"~/OpenGLCheckWithQt/${ver}/OpenGLCheckWithQt --appimage-extract\" option"
   fi
 
   echo "Done."
-  echo "To run CheckOpenGL, enter the command \"~/CheckOpenGL/${ver}/CheckOpenGL\" in your console."
+  echo "To run OpenGLCheckWithQt, enter the command \"~/OpenGLCheckWithQt/${ver}/OpenGLCheckWithQt\" in your console."
   
 }
 
@@ -125,7 +125,7 @@ for i in {1..3}
 do
   read -p "I accept the terms of the licenses above [Y/N] " choice
   case "$choice" in 
-    [yY][eE][sS]|[yY]) install_CheckOpenGL ; break  ;;
+    [yY][eE][sS]|[yY]) install_OpenGLCheckWithQt ; break  ;;
     [nN][oO]|[nN]) echo "Goodbye" ; exit 0 ;;
     * ) echo "Invalid";;
   esac
