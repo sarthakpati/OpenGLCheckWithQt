@@ -39,6 +39,6 @@ int main(int argc, char** argv)
     std::cout << "Compatible OpenGL was found.\n";
   }
   
-  return app.exec();
+  return 0;
 
 }

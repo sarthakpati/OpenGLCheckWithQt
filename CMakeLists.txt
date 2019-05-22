@@ -51,6 +51,7 @@ IF( CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT )
 
   IF( WIN32 )
     SET( CMAKE_INSTALL_PREFIX ${PROJECT_BINARY_DIR}/install CACHE PATH "Changed the default install path" FORCE  )
+    INSTALL(FILES "${DATA_DIR}/qt.conf" DESTINATION bin)
   ELSEIF( APPLE )
     # do nothing
   ELSE()
